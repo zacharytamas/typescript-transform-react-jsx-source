@@ -1,33 +1,26 @@
 {
-  "name": "ts-transform-react-jsx-source",
+  "name": "typescript-transform-react-jsx-source",
   "version": "1.0.0",
   "description": "Adds source file and line number to JSX elements.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "rm -rf test/fixture/*.js && tsc && mocha --require ts-node/register test/*.test.ts",
-    "prettier": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=es5 --no-semi --parser=typescript --write 'src/**/*.ts*' || true",
-    "prepublishOnly": "tsc"
+    "test": "rm -rf test/fixture/*.js && ttsc -p test/tsconfig.json && mocha --require ts-node/register test/*.test.ts",
+    "prepack": "rm -fr ./dist && tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dropbox/ts-transform-react-jsx-source.git"
+    "url": "git+https://github.com/alexgorbatchev/typescript-transform-react-jsx-source.git"
   },
-  "keywords": [
-    "typescript",
-    "transform",
-    "ts",
-    "react",
-    "jsx",
-    "source"
-  ],
-  "author": "Long Ho <longho@dropbox.com>",
+  "keywords": ["typescript", "transform", "ts", "react", "jsx", "source"],
+  "authors": ["Long Ho <longho@dropbox.com>", "Alex Gorbatchev <alex.gorbatchev@gmail.com>"],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/dropbox/ts-transform-react-jsx-source/issues"
+    "url": "https://github.com/alexgorbatchev/typescript-transform-react-jsx-source/issues"
   },
-  "homepage": "https://github.com/dropbox/ts-transform-react-jsx-source#readme",
-  "dependencies": {
-    "typescript": "3"
+  "homepage": "https://github.com/alexgorbatchev/typescript-transform-react-jsx-source#readme",
+  "peerDependencies": {
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
@@ -42,6 +35,8 @@
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.2",
     "react": "^16.6.3",
-    "ts-node": "^8.1.0"
+    "ts-node": "^8.1.0",
+    "ttypescript": "^1.5.10",
+    "typescript": "^3.8.3"
   }
 }

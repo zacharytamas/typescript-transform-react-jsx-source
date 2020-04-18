@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "plugins": [{ "transform": "../src/index.ts" }],
+    "outDir": "./fixture",
+    "jsx": "react"
+  },
+  "include": ["fixture/**/*"],
+  "exclude": ["node_modules"]
+}

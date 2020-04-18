@@ -1,52 +1,56 @@
-# ts-transform-react-jsx-source
+# typescript-transform-react-jsx-source
 
-![build status](https://travis-ci.org/dropbox/ts-transform-react-jsx-source.svg?branch=master)
-
-This is a TypeScript AST Transformer that adds source file and line number to JSX elements, similar to [babel-plugin-transform-react-jsx-source](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx-source).
+This is a TypeScript AST Transformer plugin for [ttypescript](https://github.com/cevek/ttypescript) that adds source file and line number to JSX elements, similar to [babel-plugin-transform-react-jsx-source](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx-source). This is a fork of [ts-transform-react-jsx-source](https://github.com/dropbox/ts-transform-react-jsx-source) with some alterations.
 
 ## Usage
-### Custom compiler
-First of all, you need some level of familiarity with the [TypeScript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API).
 
-`compile.ts` & tests should have examples of how this works.
+Update `tsconfig.json` to include the `plugins` section like so:
 
-### ts-loader
-You can add this in your webpack config `ts-loader`.
-```
-import {transform} from 'ts-transform-react-jsx-source';
-// webpack config
-...
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              getCustomTransformers() {
-                return {
-                  before: [transform()],
-                };
-              },
-            },
-          },
-        ],
-        exclude: /node_modules/,
-      },
+```json
+{
+  "compilerOptions": {
+    "plugins": [
+      { "transform": "typescript-transform-react-jsx-source" }
+    ],
+  }
+}
 ```
 
-## License
+Update Jest configuration:
 
-Copyright (c) 2018 Dropbox, Inc.
+```js
+{
+  globals: {
+    'ts-jest': {
+      compiler: 'ttypescript'
+    }
+  }
+}
+```
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+With that configuration, when running `jest`, React errors should look something like this (notice `at File.tsx:NN`):
 
-    http://www.apache.org/licenses/LICENSE-2.0
+```text
+Warning: An update to null inside a test was not wrapped in act(...).
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
+    in Unknown (at edit/index.tsx:43)
+    in ErrorBoundaryInternal (at ErrorBoundary.tsx:43)
+    in Unknown
+    in div (created by Context.Consumer)
+    in div (created by Context.Consumer)
+    in Card (created by Styled(Card))
+    in Styled(Card) (at Card.tsx:94)
+    in Unknown (at edit/index.tsx:27)
+    in EditFeatureView (at EditFeatureView.test.tsx:28)
+    in Provider (at EditFeatureView.test.tsx:19)
+    in Router (created by MemoryRouter)
+    in MemoryRouter (at EditFeatureView.test.tsx:17)
+```
